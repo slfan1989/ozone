@@ -157,13 +157,6 @@ public class OzoneOutputStream extends ByteArrayStreamOutput
 
   @Override
   public Map<String, String> getMetadata() {
-    if (outputStream instanceof CryptoOutputStream) {
-      return ((KeyMetadataAware)((CryptoOutputStream) outputStream)
-          .getWrappedStream()).getMetadata();
-    } else if (outputStream instanceof CipherOutputStreamOzone) {
-      return ((KeyMetadataAware)((CipherOutputStreamOzone) outputStream)
-          .getWrappedStream()).getMetadata();
-    }
-    return ((KeyMetadataAware) outputStream).getMetadata();
+    return ((KeyMetadataAware) getKeyOutputStream()).getMetadata();
   }
 }
