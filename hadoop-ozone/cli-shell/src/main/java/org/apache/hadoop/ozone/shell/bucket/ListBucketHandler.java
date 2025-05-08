@@ -46,6 +46,10 @@ public class ListBucketHandler extends VolumeHandler {
       description = "Only show buckets that have at least one active snapshot.")
   private boolean filterByHasSnapshot;
 
+  @CommandLine.Option(names = {"--prefix", "-p"},
+      description = "Prefix to filter the items")
+  private String prefix;
+
   @Override
   protected void execute(OzoneClient client, OzoneAddress address)
       throws IOException {
@@ -54,7 +58,7 @@ public class ListBucketHandler extends VolumeHandler {
     ObjectStore objectStore = client.getObjectStore();
     OzoneVolume vol = objectStore.getVolume(volumeName);
     Iterator<? extends OzoneBucket> bucketIterator =
-        vol.listBuckets(listOptions.getPrefix(),
+        vol.listBuckets(prefix,
             listOptions.getStartItem(), filterByHasSnapshot);
     List<Object> bucketList = new ArrayList<>();
     int counter = 0;

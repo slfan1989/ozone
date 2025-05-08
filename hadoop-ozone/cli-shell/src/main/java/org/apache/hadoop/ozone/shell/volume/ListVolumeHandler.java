@@ -53,6 +53,10 @@ public class ListVolumeHandler extends Handler {
           + " if list all volumes option is specified.")
   private String userName;
 
+  @Option(names = {"--prefix", "-p"},
+      description = "Prefix to filter the items")
+  private String prefix;
+
   @Override
   protected OzoneAddress getAddress() throws OzoneClientException {
     OzoneAddress address = new OzoneAddress(uri);
@@ -71,10 +75,10 @@ public class ListVolumeHandler extends Handler {
     Iterator<? extends OzoneVolume> volumeIterator;
     if (userName != null && !listOptions.isAll()) {
       volumeIterator = client.getObjectStore().listVolumesByUser(userName,
-          listOptions.getPrefix(), listOptions.getStartItem());
+          prefix, listOptions.getStartItem());
     } else {
       volumeIterator = client.getObjectStore().listVolumes(
-          listOptions.getPrefix(), listOptions.getStartItem());
+          prefix, listOptions.getStartItem());
     }
 
     int counter = printAsJsonArray(volumeIterator, listOptions.getLimit());

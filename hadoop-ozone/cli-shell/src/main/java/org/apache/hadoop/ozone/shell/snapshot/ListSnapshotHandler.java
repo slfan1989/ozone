@@ -42,6 +42,10 @@ public class ListSnapshotHandler extends Handler {
   @CommandLine.Mixin
   private ListOptions listOptions;
 
+  @CommandLine.Option(names = {"--prefix", "-p"},
+      description = "Prefix to filter the items")
+  private String prefix;
+
   @Override
   protected OzoneAddress getAddress() {
     return snapshotPath.getValue();
@@ -54,7 +58,7 @@ public class ListSnapshotHandler extends Handler {
     String bucketName = snapshotPath.getValue().getBucketName();
 
     Iterator<OzoneSnapshot> snapshotInfos = client.getObjectStore()
-        .listSnapshot(volumeName, bucketName, listOptions.getPrefix(),
+        .listSnapshot(volumeName, bucketName, prefix,
             listOptions.getStartItem());
     int counter = printAsJsonArray(snapshotInfos, listOptions.getLimit());
     if (isVerbose()) {

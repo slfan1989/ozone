@@ -69,6 +69,10 @@ public class DiskUsageSubCommand implements Callable {
   @CommandLine.Mixin
   private ListOptions listOptions;
 
+  @CommandLine.Option(names = {"--prefix", "-p"},
+      description = "Prefix to filter the items")
+  private String prefix;
+
   private static final String ENDPOINT = "/api/v1/namespace/du";
 
   // For text alignment
@@ -147,7 +151,7 @@ public class DiskUsageSubCommand implements Callable {
         printWithUnderline("DU", true);
         printDUHeader();
         int limit = listOptions.getLimit();
-        String seekStr = listOptions.getPrefix();
+        String seekStr = prefix;
         if (seekStr == null) {
           seekStr = "";
         }

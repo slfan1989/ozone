@@ -41,6 +41,10 @@ public class ListKeyHandler extends VolumeBucketHandler {
   @CommandLine.Mixin
   private ListOptions listOptions;
 
+  @CommandLine.Option(names = {"--prefix", "-p"},
+      description = "Prefix to filter the items")
+  private String prefix;
+
   @Override
   protected void execute(OzoneClient client, OzoneAddress address)
       throws IOException {
@@ -62,13 +66,13 @@ public class ListKeyHandler extends VolumeBucketHandler {
     if (!Strings.isNullOrEmpty(snapshotNameWithIndicator)) {
       keyPrefix += snapshotNameWithIndicator;
 
-      if (!Strings.isNullOrEmpty(listOptions.getPrefix())) {
+      if (!Strings.isNullOrEmpty(prefix)) {
         keyPrefix += "/";
       }
     }
 
-    if (!Strings.isNullOrEmpty(listOptions.getPrefix())) {
-      keyPrefix += listOptions.getPrefix();
+    if (!Strings.isNullOrEmpty(prefix)) {
+      keyPrefix += prefix;
     }
 
     OzoneVolume vol = client.getObjectStore().getVolume(volumeName);
@@ -111,8 +115,8 @@ public class ListKeyHandler extends VolumeBucketHandler {
         vol.listBuckets(null);
     int maxKeyLimit = listOptions.getLimit();
     String keyPrefix = "";
-    if (!Strings.isNullOrEmpty(listOptions.getPrefix())) {
-      keyPrefix += listOptions.getPrefix();
+    if (!Strings.isNullOrEmpty(prefix)) {
+      keyPrefix += prefix;
     }
 
     int totalKeys = 0;
